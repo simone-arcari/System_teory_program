@@ -1,0 +1,179 @@
+clc
+clear all
+close all
+
+
+fprintf("##############################################################\n")
+fprintf("Questo programma permette di studiare un sistema lineare a\n")
+fprintf("tempo discreto con matrice diagonale per qualsiasi dimensione\n")
+fprintf("dello spazio degli stati.\n")
+fprintf("##############################################################\n\n")
+
+n = input("inserisci dimensione spazio degli stati: ");
+p = input("inserisci dimensione vettore degli ingressi: ");
+
+lambda = zeros(n,1);
+
+A = eye(n);
+B = ones(n,p);
+x = zeros(n,1);
+
+
+for i = 1:1:n
+    lambda(i) = input(sprintf("Inserisci lambda%d: ",i)); 
+    A(i,i) = lambda(i);
+end
+
+fprintf("\n")
+
+%If lambda_i absolute value is >= 1 we know that the system is already not
+%reachable 
+%while (((abs(lambda1)<1 && abs(lambda2)<1) || (abs(lambda1)==1 && abs(lambda2)<1) || (abs(lambda1)<1 && abs(lambda2)==1)) == false)                 
+%    fprintf("\nlambda deve essere in modulo minore di 1\n\n")
+%    lambda1 = input('Inserisci un lambda1: ');          
+%    lambda2 = input('Inserisci un lambda2: ');
+%end
+%B = [1.0; 1.0];
+%x = [0.0 ; 0.0];
+
+
+
+
+
+for theta = 0:0.1:(2*pi)       %iteration between polar coordinates on the unit circle 
+
+    x(1) = sin(theta);        
+    x(2) = cos(theta);
+
+    k = 0;                     %starting k value as 0 because in the next while loop the first action is incrementing k
+    u = -1;                    %starting u value as -1 to use it as an escape value for the function bestControl
+        
+    %Find the first k for which is possible to calculate a controller u by
+    %incrementing k when bestControl doesn't return an acceptable value (~= -1)
+    while u == -1    
+        k = k+1;
+        [u, P, w] = bestControl(A, B, k, x);
+    end
+    
+    k_bar = k;                  %
+    old_J = -1;                 %Starting old_J value as -1 to initialize the following while loop
+    J = costIndex(w);           %Calculate the first cost Index
+    costi = [];
+    
+    %while loop goes on until the J is minimize with a ~= operator, because
+    %we know from the theory we already know that J is a decreasing
+    %function 
+    while old_J ~= J           
+        costi = [costi J];      %Every iteration we add the k-cost to the costs vector  
+        k = k+1;                %Increase of k
+        
+        [u, P, w] = bestControl(A, B, k, x);
+        
+        old_J = J;              %Setting up old_J as J to prepare for new iteration
+        J = costIndex(w);       %Calculate current J value for this iteration    
+    end
+
+
+
+    nu_max = k - 1;     %Max amount of steps possible, calculate as k-1 because the last k value in the while loop is the stopped minizing J
+    tempi = 0:1:nu_max;
+    [u, P, w] = bestControl(A, B, nu_max, x);
+
+
+
+    %Printing info for the user *******************************************
+    fprintf("\n")
+    fprintf("*********************************************************************\n")
+    fprintf("[INFO] --> Il numero di passi che minimizza l'indice di costo J è: %d\n", nu_max)
+    fprintf("[INFO] --> l'indice di costo minimo è: %f\n", J)
+    
+    fprintf("[INFO] --> Lo stato da raggiungere era:\n")
+    disp(x)
+
+    fprintf("[INFO] --> Il controllore trovato ci porta nello stato:\n")
+    x_found = P*w;
+    disp(x_found)
+    fprintf("*********************************************************************\n\n")
+
+
+
+    %**********************************************************************
+    ingressi = u(1 : p); 
+
+    for i = (p+1):p:((nu_max)*p)      %We put u(k) vectors in a line matrix according to k increase 
+        topCut = i;
+        bottomCut = topCut + p-1;
+        ingressi = [ingressi u(topCut : bottomCut)];
+    end 
+
+    stati = zeros(n, 1);
+    stato_precedente = stati;
+
+    for i = 1:p:nu_max
+        stato_attuale = A*stato_precedente + B*ingressi(i);
+        stati = [stati stato_attuale];
+        stato_precedente = stato_attuale;
+    end
+
+
+
+    %Plotting cost Index **************************************************
+    figure(1)       
+    plot(tempi((k_bar+1):end), costi, '-o')
+    xlabel('tempi k-esimi', 'FontSize', 16)
+    ylabel('costi k-esami', 'FontSize', 16)
+    title('Indice di costo al variare di k', 'FontSize', 16)
+    grid on
+    
+
+
+    %Plotting p-inputs; In case p = 1 it only plots one line **************
+    figure(2)
+
+    for i = 1:1:p
+        plot(tempi(1:end-1), ingressi(i,:), '-o')
+        hold on     
+    end    
+
+    xlabel('tempi k-esimi', 'FontSize', 16)
+    ylabel('ingressi k-esami', 'FontSize', 16)
+    title('Confronto andamento ingressi per J minimizzato', 'FontSize', 16)
+    grid on
+
+
+
+    %Plotting p-inputs; In case p = 1 it only plots one line **************
+    figure(3)
+
+    for i = 1:1:p
+        plot(tempi(1:end-1), ingressi(i,:), '-o')
+        hold off     
+    end    
+
+    xlabel('tempi k-esimi', 'FontSize', 16)
+    ylabel('ingressi k-esami', 'FontSize', 16)
+    title('Andamento ingressi per J minimizzato', 'FontSize', 16)
+    grid on
+
+
+
+    %Plotting x for k values **********************************************
+    figure(4)
+    for i = 1:1:n
+        plot(tempi, stati(i,:), '-o' )
+        hold on
+    end
+
+    xlabel('tempi k-esimi', 'FontSize', 16)
+    ylabel('ingressi k-esami', 'FontSize', 16)
+    title('Andamento stati per J minimizzato', 'FontSize', 16)
+    grid on
+    hold off 
+
+
+    
+    %input to make the user decide when to unpause the program ************
+    input("premi invio per andare avanti\n");
+end
+
+fprintf("programma terminato")

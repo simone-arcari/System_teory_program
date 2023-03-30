@@ -1,0 +1,43 @@
+function [u] = bestControl(A,B, nu, x_bar)
+%   BESTCONTROL: This function calculates the optimal control u,
+%   Step 1: Calculate P_nu
+%   Step 2: Calculate G = P*P' , find beta so that G*beta = x_bar and define w = P'*beta
+
+%STEP1 ********************************************************************
+
+P = B;                %Setting up P_nu as B
+
+for i = 1:1:nu-1      %Index starts at 1 because P_nu is already setted up as B
+
+    P = [P A^i*B];    %Every iteration adds matrix A^i*B to current P_nu
+end
+
+%STEP2 ********************************************************************
+
+P_t = P';             %Calculate P traspose 
+G = P*P_t;            %Calculate G
+G_inv = inv(G);       %Invert G 
+
+if G_inv == 0         %If G is not-invertable return -1 
+    
+    fprintf("Non esiste un controllo ottimo\n") 
+    fprintf("x_bar non è raggiungibile in nu passi\n")
+    return -1;
+end
+
+beta = G_inv*x_bar;    %Calculate beta
+w = P_t*beta;          %Calculate w
+
+%STEP3 ********************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
