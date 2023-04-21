@@ -1,4 +1,5 @@
 %% pulizia
+%Per autovalori reali, distinti e negativi: gamma1=-8 e gamma2=-6
 clc
 clear all
 close all
@@ -224,7 +225,7 @@ x = linspace(0, 100, 500); % genera 500 valori equispaziati tra 0 e 100
 y = -(x.^2)/4;
 x_area = [x, fliplr(x)];
 y_area = [y, zeros(size(y))];
-fill(x_area, y_area, 'k');
+fill(x_area, y_area, 'w');
 
 x = linspace(0, 100, 500); % genera 500 valori equispaziati tra 0 e 100
 y = -(x.^2)/4;
@@ -238,27 +239,32 @@ x_area = [x, fliplr(x)];
 y_area = [zeros(size(y)), 100*ones(size(y))];
 fill(x_area, y_area, 'm');
 
-text(-9, -2, 'reali e distinti entrambi negativi');
-text(-5, -8, 'complessi coniugati Re<0');
-text(1, -8, 'complessi coniugati Re>0');
-
-text(-10, 2, 'reali e distinti lambda1>0');
+text(-9, -2, 'reali e distinti entrambi negativi(-|-)');
+text(-5, -8, 'complessi coniugati Re(-|-)');
+text(1, -8, 'complessi coniugati Re(+|+)');
+text(4, -2, 'reali e distinti entrambi positivi(+|+)');
+text(4, 2, 'reali e distinti lambda1(-) lambda2(+)');
+text(-9, 2, 'reali e distinti lambda1(+) lambda2(-)');
 hold off
 
 %% corpo principale
-gamma1 =6;
-gamma2 = -6;
+clc
+
+gamma1 = input("inserisci gamma1: ");
+gamma2 = input("inserisci gamma2: ");
 
 A = [0, 1 ; gamma1, gamma2];
 B = [0; 1];
 
-lambda = eig(A);
+lambda = eig(A, 'vector');
 
 fprintf("Autovalori di A:\n")
-fprintf("lambda1 = %f\n", lambda(1))
-fprintf("lambda2 = %f\n", lambda(2))
+z = lambda(1);
+fprintf("lambda1 = %f + %fi\n", real(z), imag(z))
+z = lambda(2);
+fprintf("lambda2 = %f + %fi\n", real(z), imag(z))
 
-% secondo il Teorema di Shannon la frequenza di campionamento f_c
+%% secondo il Teorema di Shannon la frequenza di campionamento f_c
 % deve essere almeno il doppio della frequenza massima del segnale 
 % campionato f_s 
 % in questo caso ciò lo si può intendere nel seguente modo:
@@ -271,7 +277,7 @@ fprintf("lambda2 = %f\n", lambda(2))
 % ovvero ==> d_tau <= sampling_time/2
 
 d_tau = 0.0025;
-sampling_time = 0.125;
+sampling_time = 0.05;
 max_time = 6;
 t = 0:sampling_time:max_time;
 

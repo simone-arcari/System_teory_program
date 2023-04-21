@@ -1,4 +1,5 @@
 %% pulizia
+%Per autovalori reali, distinti e negativi: gamma1=-8 e gamma2=-6
 clc
 clear all
 close all
@@ -263,7 +264,7 @@ fprintf("lambda1 = %f + %fi\n", real(z), imag(z))
 z = lambda(2);
 fprintf("lambda2 = %f + %fi\n", real(z), imag(z))
 
-% secondo il Teorema di Shannon la frequenza di campionamento f_c
+%% secondo il Teorema di Shannon la frequenza di campionamento f_c
 % deve essere almeno il doppio della frequenza massima del segnale 
 % campionato f_s 
 % in questo caso ciò lo si può intendere nel seguente modo:
