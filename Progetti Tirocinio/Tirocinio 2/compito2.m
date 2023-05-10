@@ -264,24 +264,6 @@ fprintf("lambda1 = %f + %fi\n", real(z), imag(z))
 z = lambda(2);
 fprintf("lambda2 = %f + %fi\n", real(z), imag(z))
 
-%%
-G11_analytical = 1/96 + (-1/16)*exp(-4*t) + (1/12)*exp(-6*t) + (-1/32)*exp(-8*t);
-G12_analytical = (1/8)*exp(-4*t) + (-1/4)*exp(-6*t) + (1/8)*exp(-8*t);
-G21_analytical = G12_analytical;
-G22_analytical = 1/12 + (-1/4)*exp(-4*t) + (2/3)*exp(-6*t) + (-1/2)*exp(-8*t);
-
-%%
-G11_analytical = (-1/36)*exp(-4*t) + (2/9)*exp(-t) + (1/18)*exp(2*t) -25/36;
-G12_analytical = (1/18)*exp(-4*t) + (-1/9)*exp(-t) + (1/18)*exp(2*t);
-G21_analytical = G12_analytical;
-G22_analytical = (-1/9)*exp(-4*t) + (-4/9)*exp(-t) + (1/18)*exp(2*t) +1/2;
-
-%%
-G11_analytical = (1/8)*(exp(-2*t)).*(-sin(2*t)+cos(2*t)) + (-1/4)*exp(-2*t) + (1/8);
-G12_analytical = (-1/4)*(exp(-2*t)).*cos(2*t) + (1/4)*exp(-2*t);
-G21_analytical = G12_analytical;
-G22_analytical = (1/4)*(exp(-2*t)).*(sin(2*t)+cos(2*t)) + (-1/2)*exp(-2*t) + (1/4);
-
 %% secondo il Teorema di Shannon la frequenza di campionamento f_c
 % deve essere almeno il doppio della frequenza massima del segnale 
 % campionato f_s 
@@ -294,9 +276,9 @@ G22_analytical = (1/4)*(exp(-2*t)).*(sin(2*t)+cos(2*t)) + (-1/2)*exp(-2*t) + (1/
 % nell'intervallo [0, d_tau] ci sia contenuto almeno 2 volte d_tau 
 % ovvero ==> d_tau <= sampling_time/2
 
-d_tau = 0.0025;
+d_tau = 0.025;
 sampling_time = 0.025;
-max_time = 6;
+max_time = 7;
 t = 0:sampling_time:max_time;
 
 
@@ -304,15 +286,38 @@ G11 = zeros(1, 1+(max_time/sampling_time));
 G12 = zeros(1, 1+(max_time/sampling_time));
 G21 = zeros(1, 1+(max_time/sampling_time));
 G22 = zeros(1, 1+(max_time/sampling_time));
+beta
 
-
+contatore = 1;
+massimo_contatore = 1+(max_time/sampling_time);
+fprintf('-->Percentuale completamento: 0######')
 
 for i = 1:1:(max_time/sampling_time)+1
     tau = 0:d_tau:t(i);
     G = zeros(2,2);
+    M = (B')*expm(A'*tau(i));
+
+
+    % codice per stampare la parcentuale di completamento del calcolo------
+    percentuale = 100*(contatore/massimo_contatore);
+
+    if percentuale < 10
+        fprintf('\b\b\b\b\b\b')
+    else
+        fprintf('\b\b\b\b\b\b\b')
+    end
+    
+    fprintf('%.2f%%\n', 100*(contatore/massimo_contatore))
+    contatore = contatore + 1;
+    %----------------------------------------------------------------------
 
     for j = 1:1:(t(i)/d_tau)
-        G = G + expm(A*tau(j))*B*(B')*expm(A'*tau(j))*d_tau;
+        M1 = expm(A*tau(j))*B;
+        M2 = (B')*expm(A'*tau(j));
+
+        G = G + M1*M2*d_tau;
+        beta = inv(M2)*u()
+
         G11(i) = G(1,1);
         G12(i) = G(1,2);
         G21(i) = G(2,1);
@@ -320,6 +325,31 @@ for i = 1:1:(max_time/sampling_time)+1
     end
 end
 
+%% gamma1: , gamma2: , --> lambda1: , lambda2: 
+G11_analytical = 1/96 + (-1/16)*exp(-4*t) + (1/12)*exp(-6*t) + (-1/32)*exp(-8*t);
+G12_analytical = (1/8)*exp(-4*t) + (-1/4)*exp(-6*t) + (1/8)*exp(-8*t);
+G21_analytical = G12_analytical;
+G22_analytical = 1/12 + (-1/4)*exp(-4*t) + (2/3)*exp(-6*t) + (-1/2)*exp(-8*t);
+
+%% gamma1: , gamma2: , --> lambda1: , lambda2:
+G11_analytical = (-1/36)*exp(-4*t) + (2/9)*exp(-t) + (1/18)*exp(2*t) -25/36;
+G12_analytical = (1/18)*exp(-4*t) + (-1/9)*exp(-t) + (1/18)*exp(2*t);
+G21_analytical = G12_analytical;
+G22_analytical = (-1/9)*exp(-4*t) + (-4/9)*exp(-t) + (1/18)*exp(2*t) +1/2;
+
+%% gamma1: -2, gamma2: -2, --> lambda1: -1-j, lambda2: -1+j
+G11_analytical = (1/8)*(exp(-2*t)).*(-sin(2*t)+cos(2*t)) + (-1/4)*exp(-2*t) + (1/8);
+G12_analytical = (-1/4)*(exp(-2*t)).*cos(2*t) + (1/4)*exp(-2*t);
+G21_analytical = G12_analytical;
+G22_analytical = (1/4)*(exp(-2*t)).*(sin(2*t)+cos(2*t)) + (-1/2)*exp(-2*t) + (1/4);
+
+%% gamma1: -2, gamma2: 2, --> lambda1: 1-j, lambda2: 1+j
+G11_analytical = (-1/8)*(exp(2*t)).*(sin(2*t)+cos(2*t)) + (1/4)*exp(2*t) + (-1/8);
+G12_analytical = (-1/4)*(exp(2*t)).*cos(2*t) + (1/4)*exp(2*t);
+G21_analytical = G12_analytical;
+G22_analytical = (1/4)*(exp(2*t)).*(sin(2*t)-cos(2*t)) + (1/2)*exp(2*t) + (-1/4);
+
+%%
 figure(1)
 xlabel('tempi [t]', 'FontSize', 16)
 ylabel('G(1,1)', 'FontSize', 16)
@@ -327,7 +357,7 @@ title('Funzione G11(t)', 'FontSize', 16)
 plot(t, G11, '-o')
 hold on
 plot(t, G11_analytical, '-x')
-legend('G11_calcolata', 'G11_analitica')
+legend('G11 calcolata', 'G11 analitica')
 hold off
 grid on
 
