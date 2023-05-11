@@ -325,13 +325,13 @@ for i = 1:1:(max_time/sampling_time)+1
     end
 end
 
-%% gamma1: , gamma2: , --> lambda1: , lambda2: 
+%% gamma1: -8, gamma2: -6, --> lambda1: -4, lambda2: -2 
 G11_analytical = 1/96 + (-1/16)*exp(-4*t) + (1/12)*exp(-6*t) + (-1/32)*exp(-8*t);
 G12_analytical = (1/8)*exp(-4*t) + (-1/4)*exp(-6*t) + (1/8)*exp(-8*t);
 G21_analytical = G12_analytical;
 G22_analytical = 1/12 + (-1/4)*exp(-4*t) + (2/3)*exp(-6*t) + (-1/2)*exp(-8*t);
 
-%% gamma1: , gamma2: , --> lambda1: , lambda2:
+%% gamma1: 2, gamma2: -1, --> lambda1: 1, lambda2: -2
 G11_analytical = (-1/36)*exp(-4*t) + (2/9)*exp(-t) + (1/18)*exp(2*t) -25/36;
 G12_analytical = (1/18)*exp(-4*t) + (-1/9)*exp(-t) + (1/18)*exp(2*t);
 G21_analytical = G12_analytical;
