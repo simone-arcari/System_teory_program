@@ -276,7 +276,7 @@ fprintf("lambda2 = %f + %fi\n", real(z), imag(z))
 % nell'intervallo [0, d_tau] ci sia contenuto almeno 2 volte d_tau 
 % ovvero ==> d_tau <= sampling_time/2
 
-d_tau = 0.025;
+d_tau = 0.0025;
 sampling_time = 0.025;
 max_time = 7;
 t = 0:sampling_time:max_time;
@@ -286,7 +286,7 @@ G11 = zeros(1, 1+(max_time/sampling_time));
 G12 = zeros(1, 1+(max_time/sampling_time));
 G21 = zeros(1, 1+(max_time/sampling_time));
 G22 = zeros(1, 1+(max_time/sampling_time));
-beta
+
 
 contatore = 1;
 massimo_contatore = 1+(max_time/sampling_time);
@@ -316,7 +316,7 @@ for i = 1:1:(max_time/sampling_time)+1
         M2 = (B')*expm(A'*tau(j));
 
         G = G + M1*M2*d_tau;
-        beta = inv(M2)*u()
+        %%beta = inv(M2)*u()
 
         G11(i) = G(1,1);
         G12(i) = G(1,2);
