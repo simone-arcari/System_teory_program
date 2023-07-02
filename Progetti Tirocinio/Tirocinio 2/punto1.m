@@ -73,9 +73,9 @@ fprintf("lambda2 = %f + %fi\n", real(z), imag(z))
 % Facendo tendere a zero d_tau e sampling_time si otterà un integrazione
 % sempre più precisa ma con un aumento notevole del costo computazionale
 
-d_tau = 0.0025;
+d_tau = 0.00025;
 sampling_time = 0.025;
-max_time = 7;
+max_time = 3;
 t = 0:sampling_time:max_time;
 
 
@@ -86,13 +86,13 @@ G22 = zeros(1, 1+(max_time/sampling_time));
 
 
 contatore = 1;
-massimo_contatore = 1+(max_time/sampling_time);
+massimo_contatore = (max_time/sampling_time);
 fprintf('\n-->Percentuale completamento del calcolo integrale: 0######')
 
-for i = 1:1:(max_time/sampling_time)+1
-    tau = 0:d_tau:t(i);
-    G = zeros(2,2);
-    M = (B')*expm(A'*tau(i));
+G = zeros(2,2);
+for i = 2:1:(max_time/sampling_time)+1
+    tau = t(i-1):d_tau:t(i);
+    %M = (B')*expm(A'*tau(i));
 
 
     % codice per stampare la parcentuale di completamento del calcolo------
@@ -109,7 +109,7 @@ for i = 1:1:(max_time/sampling_time)+1
     %----------------------------------------------------------------------
 
     % Sommatoria di Riemann
-    for j = 1:1:(t(i)/d_tau)
+    for j = 1:1:(sampling_time/d_tau)
         M1 = expm(A*tau(j))*B;
         M2 = (B')*expm(A'*tau(j));
 
