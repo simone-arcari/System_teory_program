@@ -5,8 +5,8 @@ input("\nPremi un tasto per andare avanti col punto3:")
 
 T_i = 2:1:10;
 
-x(1,1) = x_bar(1,1);
-x(2,1) = x_bar(1,2);
+x(1,1) = 1%x_bar(1,1);
+x(2,1) = 2%x_bar(1,2);
 
 u1 = zeros(1, 1 + T_i(1)/sampling_time);
 u2 = zeros(1, 1 + T_i(2)/sampling_time);
@@ -30,7 +30,7 @@ tau9 = 0:sampling_time:T_i(9);
 
 
 
-for i = 1:1:length(T_i)
+for i = 1:1:1%length(T_i)
 
     if gamma1 == -8 && gamma2 == -6
         G(1,1) = 1/96 + (-1/16)*exp(-4*T_i(i)) + (1/12)*exp(-6*T_i(i)) + (-1/32)*exp(-8*T_i(i));
@@ -251,3 +251,19 @@ plot(tau9, stato9(:,2), '-x')
 legend('x1', 'x2')
 hold off
 grid on
+
+
+
+
+
+
+
+
+
+G
+
+Ginversa = pinv(G)
+
+beta = pinv(G)*x
+
+
