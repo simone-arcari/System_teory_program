@@ -393,5 +393,3 @@ hold off
 % legend('G22 simulata', 'G22 analitica')
 % hold off
 % grid on
-
-punto1

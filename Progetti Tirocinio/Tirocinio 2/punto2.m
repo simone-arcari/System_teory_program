@@ -6,7 +6,7 @@
 %%Gli ingressi dobbiamo sceglierli in maniera variegata in base anche al
 %%caso in esame (stabili/instabili)
 
-t_bar = 3;
+t_bar = 4;
 t = 0:sampling_time:t_bar;
 
 input("\nPremi un tasto per andare avanti col punto2:")
@@ -20,7 +20,7 @@ sys = ss(A,B,C,D);
 
 %% gamma1: -8, gamma2: -6, --> lambda1: -2, lambda2: -4
 if gamma1 == -8 && gamma2 == -6
-    u_0 = sin(t);
+    u_0 = 15*exp(-0.01*t);
     state = lsim(sys, u_0, t, x0);
     x_bar = state(end, :);
 end
@@ -47,15 +47,19 @@ if gamma1 == -2 && gamma2 == 2
 end
 
 %% Grafici
-figure(5)
+figure(2)
+
 xlabel('tempi [t]', 'FontSize', 16)
 ylabel('X', 'FontSize', 16)
 title('Andamento Stati', 'FontSize', 16)
-plot(t, state(:,1), '-x')
+plot(t, state(:,1), 'color', 'red')
 hold on
-plot(t, state(:,2), '-x')
+plot(t, state(:,2), 'color', 'blue')
 legend('x1', 'x2')
 hold off
 grid on
+
+fprintf('\nIl sistema è arrivato in x_bar:')
+disp(x_bar)
 
 punto3

@@ -107,46 +107,6 @@ for i = 1:1:length(T_i)
   
 end
 
-%% Grafici Ingressi u_i
-close all
-
-figure(1)
-plot(tau1, u1)
-grid on
-
-figure(2)
-plot(tau2, u2)
-grid on
-
-figure(3)
-plot(tau3, u3)
-grid on
-
-figure(4)
-plot(tau4, u4)
-grid on
-
-figure(5)
-plot(tau5, u5)
-grid on
-
-figure(6)
-plot(tau6, u6)
-grid on
-
-figure(7)
-plot(tau7, u7)
-grid on
-
-figure(8)
-plot(tau8, u8)
-grid on
-
-figure(9)
-plot(tau9, u9)
-grid on
-
-%% 
 stato1 = lsim(sys, u1, tau1, x0);
 stato2 = lsim(sys, u2, tau2, x0);
 stato3 = lsim(sys, u3, tau3, x0);
@@ -157,104 +117,58 @@ stato7 = lsim(sys, u7, tau7, x0);
 stato8 = lsim(sys, u8, tau8, x0);
 stato9 = lsim(sys, u9, tau9, x0);
 
+%% Grafici 
 
-figure(10)
-xlabel('tempi [t]', 'FontSize', 16)
-ylabel('X', 'FontSize', 16)
-title('Andamento Stati', 'FontSize', 16)
-plot(tau1, stato1(:,1), '-x')
+figure(3)
 hold on
-plot(tau1, stato1(:,2), '-x')
-legend('x1', 'x2')
-hold off
+xlabel('tempi [t]', 'FontSize', 16)
+ylabel('U', 'FontSize', 16)
+title('Andamento Ingressi per vari T_i', 'FontSize', 16)
+plot(tau1, u1)
+plot(tau2, u2)
+plot(tau3, u3)
+plot(tau4, u4)
+plot(tau5, u5)
+plot(tau6, u6)
+plot(tau7, u7)
+plot(tau8, u8)
+plot(tau9, u9)
 grid on
+ 
 
-figure(11)
+figure(4)
+hold on
 xlabel('tempi [t]', 'FontSize', 16)
 ylabel('X', 'FontSize', 16)
 title('Andamento Stati', 'FontSize', 16)
-plot(tau2, stato2(:,1), '-x')
-hold on
-plot(tau2, stato2(:,2), '-x')
-legend('x1', 'x2')
-hold off
-grid on
 
-figure(12)
-xlabel('tempi [t]', 'FontSize', 16)
-ylabel('X', 'FontSize', 16)
-title('Andamento Stati', 'FontSize', 16)
-plot(tau3, stato3(:,1), '-x')
-hold on
-plot(tau3, stato3(:,2), '-x')
-legend('x1', 'x2')
-hold off
-grid on
+plot(tau1, stato1(:,1), 'color', 'red')
+plot(tau1, stato1(:,2), 'color', 'blue')
 
-figure(13)
-xlabel('tempi [t]', 'FontSize', 16)
-ylabel('X', 'FontSize', 16)
-title('Andamento Stati', 'FontSize', 16)
-plot(tau4, stato4(:,1), '-x')
-hold on
-plot(tau4, stato4(:,2), '-x')
-legend('x1', 'x2')
-hold off
-grid on
+plot(tau2, stato2(:,1), 'color', 'red')
+plot(tau2, stato2(:,2), 'color', 'blue')
 
-figure(14)
-xlabel('tempi [t]', 'FontSize', 16)
-ylabel('X', 'FontSize', 16)
-title('Andamento Stati', 'FontSize', 16)
-plot(tau5, stato5(:,1), '-x')
-hold on
-plot(tau5, stato5(:,2), '-x')
-legend('x1', 'x2')
-hold off
-grid on
+plot(tau3, stato3(:,1), 'color', 'red')
+plot(tau3, stato3(:,2), 'color', 'blue')
 
-figure(15)
-xlabel('tempi [t]', 'FontSize', 16)
-ylabel('X', 'FontSize', 16)
-title('Andamento Stati', 'FontSize', 16)
-plot(tau6, stato6(:,1), '-x')
-hold on
-plot(tau6, stato6(:,2), '-x')
-legend('x1', 'x2')
-hold off
-grid on
+plot(tau4, stato4(:,1), 'color', 'red')
+plot(tau4, stato4(:,2), 'color', 'blue')
 
-figure(16)
-xlabel('tempi [t]', 'FontSize', 16)
-ylabel('X', 'FontSize', 16)
-title('Andamento Stati', 'FontSize', 16)
-plot(tau7, stato7(:,1), '-x')
-hold on
-plot(tau7, stato7(:,2), '-x')
-legend('x1', 'x2')
-hold off
-grid on
+plot(tau5, stato5(:,1), 'color', 'red')
+plot(tau5, stato5(:,2), 'color', 'blue')
 
-figure(17)
-xlabel('tempi [t]', 'FontSize', 16)
-ylabel('X', 'FontSize', 16)
-title('Andamento Stati', 'FontSize', 16)
-plot(tau8, stato8(:,1), '-x')
-hold on
-plot(tau8, stato8(:,2), '-x')
-legend('x1', 'x2')
-hold off
-grid on
+plot(tau6, stato6(:,1), 'color', 'red')
+plot(tau6, stato6(:,2), 'color', 'blue')
 
-figure(18)
-xlabel('tempi [t]', 'FontSize', 16)
-ylabel('X', 'FontSize', 16)
-title('Andamento Stati', 'FontSize', 16)
-plot(tau9, stato9(:,1), '-x')
-hold on
-plot(tau9, stato9(:,2), '-x')
-legend('x1', 'x2')
-hold off
+plot(tau7, stato7(:,1), 'color', 'red')
+plot(tau7, stato7(:,2), 'color', 'blue')
+
+plot(tau8, stato8(:,1), 'color', 'red')
+plot(tau8, stato8(:,2), 'color', 'blue')
+
+plot(tau9, stato9(:,1), 'color', 'red')
+plot(tau9, stato9(:,2), 'color', 'blue')
+
 grid on
 
 

@@ -1,6 +1,7 @@
 %% Inizio del programma
 clc
 clear all
+close all
 
 
 fprintf("**************************READ ME**************************\n\n")
@@ -74,9 +75,9 @@ fprintf("lambda2 = %f + %fi\n", real(z), imag(z))
 % Facendo tendere a zero d_tau e sampling_time si otterà un integrazione
 % sempre più precisa ma con un aumento notevole del costo computazionale
 
-d_tau = 0.00025;
+d_tau = 0.0025;
 sampling_time = 0.025;
-max_time = 20;
+max_time = 10;
 t = 0:sampling_time:max_time;
 
 
@@ -157,9 +158,9 @@ if gamma1 == -2 && gamma2 == 2
 end
 
 %% Grafici
-close all
-
 figure(1)
+
+subplot(2, 2, 1);
 xlabel('tempi [t]', 'FontSize', 16)
 ylabel('G(1,1)', 'FontSize', 16)
 title('Funzione G11(t)', 'FontSize', 16)
@@ -170,7 +171,7 @@ legend('G11 calcolata', 'G11 analitica')
 hold off
 grid on
 
-figure(2)
+subplot(2, 2, 2);
 xlabel('tempi [t]', 'FontSize', 16)
 ylabel('G(1,2)', 'FontSize', 16)
 title('Funzione G12(t)', 'FontSize', 16)
@@ -181,7 +182,7 @@ legend('G12 simulata', 'G12 analitica')
 hold off
 grid on
 
-figure(3)
+subplot(2, 2, 3);
 xlabel('tempi [t]', 'FontSize', 16)
 ylabel('G(2,1)', 'FontSize', 16)
 title('Funzione G21(t)', 'FontSize', 16)
@@ -192,7 +193,7 @@ legend('G21 simulata', 'G21 analitica')
 hold off
 grid on
 
-figure(4)
+subplot(2, 2, 4);
 xlabel('tempi [t]', 'FontSize', 16)
 ylabel('G(2,2)', 'FontSize', 16)
 title('Funzione G22(t)', 'FontSize', 16)
