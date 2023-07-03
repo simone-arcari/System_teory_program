@@ -1,5 +1,7 @@
 %% Inizio del programma
 clc
+clear all
+
 
 fprintf("**************************READ ME**************************\n\n")
 
@@ -28,7 +30,6 @@ fprintf("\t\t\tlambda1: 1+j\n")
 fprintf("\t\t\tlambda2: 1-j\n\n")
 
 fprintf("***********************************************************\n\n")
-
 
 gamma1 = input("inserisci gamma1: ");
 gamma2 = input("inserisci gamma2: ");
@@ -75,7 +76,7 @@ fprintf("lambda2 = %f + %fi\n", real(z), imag(z))
 
 d_tau = 0.00025;
 sampling_time = 0.025;
-max_time = 3;
+max_time = 20;
 t = 0:sampling_time:max_time;
 
 
@@ -156,6 +157,8 @@ if gamma1 == -2 && gamma2 == 2
 end
 
 %% Grafici
+close all
+
 figure(1)
 xlabel('tempi [t]', 'FontSize', 16)
 ylabel('G(1,1)', 'FontSize', 16)
@@ -199,3 +202,5 @@ plot(t, G22_analytical, '-x')
 legend('G22 simulata', 'G22 analitica')
 hold off
 grid on
+
+punto2

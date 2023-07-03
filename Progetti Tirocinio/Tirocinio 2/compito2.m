@@ -247,149 +247,151 @@ text(4, 2, 'reali e distinti lambda1(-) lambda2(+)');
 text(-9, 2, 'reali e distinti lambda1(+) lambda2(-)');
 hold off
 
-%% corpo principale
-clc
+% %% corpo principale
+% clc
+% 
+% gamma1 = input("inserisci gamma1: ");
+% gamma2 = input("inserisci gamma2: ");
+% 
+% A = [0, 1 ; gamma1, gamma2];
+% B = [0; 1];
+% 
+% lambda = eig(A, 'vector');
+% 
+% fprintf("Autovalori di A:\n")
+% z = lambda(1);
+% fprintf("lambda1 = %f + %fi\n", real(z), imag(z))
+% z = lambda(2);
+% fprintf("lambda2 = %f + %fi\n", real(z), imag(z))
+% 
+% %% secondo il Teorema di Shannon la frequenza di campionamento f_c
+% % deve essere almeno il doppio della frequenza massima del segnale 
+% % campionato f_s 
+% % in questo caso ciò lo si può intendere nel seguente modo:
+% % se vogliamo calcolare G(t) con t che che parte da zero ed 
+% % arriva ad un valore finale(max_time) con passo sampling_time
+% % il t più piccolo dopo lo zero è t = sampling_time, quindi
+% % l'intervallo di tempo d_tau per ricavare G(sampling_time)
+% % deve essere mionore o uguale di sampling_time, in modo che 
+% % nell'intervallo [0, d_tau] ci sia contenuto almeno 2 volte d_tau 
+% % ovvero ==> d_tau <= sampling_time/2
+% 
+% d_tau = 0.0025;
+% sampling_time = 0.025;
+% max_time = 7;
+% t = 0:sampling_time:max_time;
+% 
+% 
+% G11 = zeros(1, 1+(max_time/sampling_time));
+% G12 = zeros(1, 1+(max_time/sampling_time));
+% G21 = zeros(1, 1+(max_time/sampling_time));
+% G22 = zeros(1, 1+(max_time/sampling_time));
+% 
+% 
+% contatore = 1;
+% massimo_contatore = 1+(max_time/sampling_time);
+% fprintf('-->Percentuale completamento: 0######')
+% 
+% for i = 1:1:(max_time/sampling_time)+1
+%     tau = 0:d_tau:t(i);
+%     G = zeros(2,2);
+%     M = (B')*expm(A'*tau(i));
+% 
+% 
+%     % codice per stampare la parcentuale di completamento del calcolo------
+%     percentuale = 100*(contatore/massimo_contatore);
+% 
+%     if percentuale < 10
+%         fprintf('\b\b\b\b\b\b')
+%     else
+%         fprintf('\b\b\b\b\b\b\b')
+%     end
+% 
+%     fprintf('%.2f%%\n', 100*(contatore/massimo_contatore))
+%     contatore = contatore + 1;
+%     %----------------------------------------------------------------------
+% 
+%     for j = 1:1:(t(i)/d_tau)
+%         M1 = expm(A*tau(j))*B;
+%         M2 = (B')*expm(A'*tau(j));
+% 
+%         G = G + M1*M2*d_tau;
+%         %%beta = inv(M2)*u()
+% 
+%         G11(i) = G(1,1);
+%         G12(i) = G(1,2);
+%         G21(i) = G(2,1);
+%         G22(i) = G(2,2);
+%     end
+% end
+% 
+% %% gamma1: -8, gamma2: -6, --> lambda1: -4, lambda2: -2 
+% G11_analytical = 1/96 + (-1/16)*exp(-4*t) + (1/12)*exp(-6*t) + (-1/32)*exp(-8*t);
+% G12_analytical = (1/8)*exp(-4*t) + (-1/4)*exp(-6*t) + (1/8)*exp(-8*t);
+% G21_analytical = G12_analytical;
+% G22_analytical = 1/12 + (-1/4)*exp(-4*t) + (2/3)*exp(-6*t) + (-1/2)*exp(-8*t);
+% 
+% %% gamma1: 2, gamma2: -1, --> lambda1: 1, lambda2: -2
+% G11_analytical = (-1/36)*exp(-4*t) + (2/9)*exp(-t) + (1/18)*exp(2*t) -25/36;
+% G12_analytical = (1/18)*exp(-4*t) + (-1/9)*exp(-t) + (1/18)*exp(2*t);
+% G21_analytical = G12_analytical;
+% G22_analytical = (-1/9)*exp(-4*t) + (-4/9)*exp(-t) + (1/18)*exp(2*t) +1/2;
+% 
+% %% gamma1: -2, gamma2: -2, --> lambda1: -1-j, lambda2: -1+j
+% G11_analytical = (1/8)*(exp(-2*t)).*(-sin(2*t)+cos(2*t)) + (-1/4)*exp(-2*t) + (1/8);
+% G12_analytical = (-1/4)*(exp(-2*t)).*cos(2*t) + (1/4)*exp(-2*t);
+% G21_analytical = G12_analytical;
+% G22_analytical = (1/4)*(exp(-2*t)).*(sin(2*t)+cos(2*t)) + (-1/2)*exp(-2*t) + (1/4);
+% 
+% %% gamma1: -2, gamma2: 2, --> lambda1: 1-j, lambda2: 1+j
+% G11_analytical = (-1/8)*(exp(2*t)).*(sin(2*t)+cos(2*t)) + (1/4)*exp(2*t) + (-1/8);
+% G12_analytical = (-1/4)*(exp(2*t)).*cos(2*t) + (1/4)*exp(2*t);
+% G21_analytical = G12_analytical;
+% G22_analytical = (1/4)*(exp(2*t)).*(sin(2*t)-cos(2*t)) + (1/2)*exp(2*t) + (-1/4);
+% 
+% %%
+% figure(1)
+% xlabel('tempi [t]', 'FontSize', 16)
+% ylabel('G(1,1)', 'FontSize', 16)
+% title('Funzione G11(t)', 'FontSize', 16)
+% plot(t, G11, '-o')
+% hold on
+% plot(t, G11_analytical, '-x')
+% legend('G11 calcolata', 'G11 analitica')
+% hold off
+% grid on
+% 
+% figure(2)
+% xlabel('tempi [t]', 'FontSize', 16)
+% ylabel('G(1,2)', 'FontSize', 16)
+% title('Funzione G12(t)', 'FontSize', 16)
+% plot(t, G12, '-o')
+% hold on
+% plot(t, G12_analytical, '-x')
+% legend('G12 simulata', 'G12 analitica')
+% hold off
+% grid on
+% 
+% figure(3)
+% xlabel('tempi [t]', 'FontSize', 16)
+% ylabel('G(2,1)', 'FontSize', 16)
+% title('Funzione G21(t)', 'FontSize', 16)
+% plot(t, G21, '-o')
+% hold on
+% plot(t, G21_analytical, '-x')
+% legend('G21 simulata', 'G21 analitica')
+% hold off
+% grid on
+% 
+% figure(4)
+% xlabel('tempi [t]', 'FontSize', 16)
+% ylabel('G(2,2)', 'FontSize', 16)
+% title('Funzione G22(t)', 'FontSize', 16)
+% plot(t, G22, '-o')
+% hold on
+% plot(t, G22_analytical, '-x')
+% legend('G22 simulata', 'G22 analitica')
+% hold off
+% grid on
 
-gamma1 = input("inserisci gamma1: ");
-gamma2 = input("inserisci gamma2: ");
-
-A = [0, 1 ; gamma1, gamma2];
-B = [0; 1];
-
-lambda = eig(A, 'vector');
-
-fprintf("Autovalori di A:\n")
-z = lambda(1);
-fprintf("lambda1 = %f + %fi\n", real(z), imag(z))
-z = lambda(2);
-fprintf("lambda2 = %f + %fi\n", real(z), imag(z))
-
-%% secondo il Teorema di Shannon la frequenza di campionamento f_c
-% deve essere almeno il doppio della frequenza massima del segnale 
-% campionato f_s 
-% in questo caso ciò lo si può intendere nel seguente modo:
-% se vogliamo calcolare G(t) con t che che parte da zero ed 
-% arriva ad un valore finale(max_time) con passo sampling_time
-% il t più piccolo dopo lo zero è t = sampling_time, quindi
-% l'intervallo di tempo d_tau per ricavare G(sampling_time)
-% deve essere mionore o uguale di sampling_time, in modo che 
-% nell'intervallo [0, d_tau] ci sia contenuto almeno 2 volte d_tau 
-% ovvero ==> d_tau <= sampling_time/2
-
-d_tau = 0.0025;
-sampling_time = 0.025;
-max_time = 7;
-t = 0:sampling_time:max_time;
-
-
-G11 = zeros(1, 1+(max_time/sampling_time));
-G12 = zeros(1, 1+(max_time/sampling_time));
-G21 = zeros(1, 1+(max_time/sampling_time));
-G22 = zeros(1, 1+(max_time/sampling_time));
-
-
-contatore = 1;
-massimo_contatore = 1+(max_time/sampling_time);
-fprintf('-->Percentuale completamento: 0######')
-
-for i = 1:1:(max_time/sampling_time)+1
-    tau = 0:d_tau:t(i);
-    G = zeros(2,2);
-    M = (B')*expm(A'*tau(i));
-
-
-    % codice per stampare la parcentuale di completamento del calcolo------
-    percentuale = 100*(contatore/massimo_contatore);
-
-    if percentuale < 10
-        fprintf('\b\b\b\b\b\b')
-    else
-        fprintf('\b\b\b\b\b\b\b')
-    end
-    
-    fprintf('%.2f%%\n', 100*(contatore/massimo_contatore))
-    contatore = contatore + 1;
-    %----------------------------------------------------------------------
-
-    for j = 1:1:(t(i)/d_tau)
-        M1 = expm(A*tau(j))*B;
-        M2 = (B')*expm(A'*tau(j));
-
-        G = G + M1*M2*d_tau;
-        %%beta = inv(M2)*u()
-
-        G11(i) = G(1,1);
-        G12(i) = G(1,2);
-        G21(i) = G(2,1);
-        G22(i) = G(2,2);
-    end
-end
-
-%% gamma1: -8, gamma2: -6, --> lambda1: -4, lambda2: -2 
-G11_analytical = 1/96 + (-1/16)*exp(-4*t) + (1/12)*exp(-6*t) + (-1/32)*exp(-8*t);
-G12_analytical = (1/8)*exp(-4*t) + (-1/4)*exp(-6*t) + (1/8)*exp(-8*t);
-G21_analytical = G12_analytical;
-G22_analytical = 1/12 + (-1/4)*exp(-4*t) + (2/3)*exp(-6*t) + (-1/2)*exp(-8*t);
-
-%% gamma1: 2, gamma2: -1, --> lambda1: 1, lambda2: -2
-G11_analytical = (-1/36)*exp(-4*t) + (2/9)*exp(-t) + (1/18)*exp(2*t) -25/36;
-G12_analytical = (1/18)*exp(-4*t) + (-1/9)*exp(-t) + (1/18)*exp(2*t);
-G21_analytical = G12_analytical;
-G22_analytical = (-1/9)*exp(-4*t) + (-4/9)*exp(-t) + (1/18)*exp(2*t) +1/2;
-
-%% gamma1: -2, gamma2: -2, --> lambda1: -1-j, lambda2: -1+j
-G11_analytical = (1/8)*(exp(-2*t)).*(-sin(2*t)+cos(2*t)) + (-1/4)*exp(-2*t) + (1/8);
-G12_analytical = (-1/4)*(exp(-2*t)).*cos(2*t) + (1/4)*exp(-2*t);
-G21_analytical = G12_analytical;
-G22_analytical = (1/4)*(exp(-2*t)).*(sin(2*t)+cos(2*t)) + (-1/2)*exp(-2*t) + (1/4);
-
-%% gamma1: -2, gamma2: 2, --> lambda1: 1-j, lambda2: 1+j
-G11_analytical = (-1/8)*(exp(2*t)).*(sin(2*t)+cos(2*t)) + (1/4)*exp(2*t) + (-1/8);
-G12_analytical = (-1/4)*(exp(2*t)).*cos(2*t) + (1/4)*exp(2*t);
-G21_analytical = G12_analytical;
-G22_analytical = (1/4)*(exp(2*t)).*(sin(2*t)-cos(2*t)) + (1/2)*exp(2*t) + (-1/4);
-
-%%
-figure(1)
-xlabel('tempi [t]', 'FontSize', 16)
-ylabel('G(1,1)', 'FontSize', 16)
-title('Funzione G11(t)', 'FontSize', 16)
-plot(t, G11, '-o')
-hold on
-plot(t, G11_analytical, '-x')
-legend('G11 calcolata', 'G11 analitica')
-hold off
-grid on
-
-figure(2)
-xlabel('tempi [t]', 'FontSize', 16)
-ylabel('G(1,2)', 'FontSize', 16)
-title('Funzione G12(t)', 'FontSize', 16)
-plot(t, G12, '-o')
-hold on
-plot(t, G12_analytical, '-x')
-legend('G12 simulata', 'G12 analitica')
-hold off
-grid on
-
-figure(3)
-xlabel('tempi [t]', 'FontSize', 16)
-ylabel('G(2,1)', 'FontSize', 16)
-title('Funzione G21(t)', 'FontSize', 16)
-plot(t, G21, '-o')
-hold on
-plot(t, G21_analytical, '-x')
-legend('G21 simulata', 'G21 analitica')
-hold off
-grid on
-
-figure(4)
-xlabel('tempi [t]', 'FontSize', 16)
-ylabel('G(2,2)', 'FontSize', 16)
-title('Funzione G22(t)', 'FontSize', 16)
-plot(t, G22, '-o')
-hold on
-plot(t, G22_analytical, '-x')
-legend('G22 simulata', 'G22 analitica')
-hold off
-grid on
+punto1
