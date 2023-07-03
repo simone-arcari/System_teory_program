@@ -20,14 +20,14 @@ sys = ss(A,B,C,D);
 
 %% gamma1: -8, gamma2: -6, --> lambda1: -2, lambda2: -4
 if gamma1 == -8 && gamma2 == -6
-    u_0 = 100*exp(-t);
+    u_0 = sin(t);
     state = lsim(sys, u_0, t, x0);
     x_bar = state(end, :);
 end
 
 %% gamma1: 2, gamma2: -1, --> lambda1: 1, lambda2: -2
 if gamma1 == 2 && gamma2 == -1
-    u_0 = ones(size(t));
+    u_0 = sin(t);
     state = lsim(sys, u_0, t, x0);
     x_bar = state(end, :);
 end
@@ -41,7 +41,7 @@ end
 
 %% gamma1: -2, gamma2: 2, --> lambda1: 1-j, lambda2: 1+j
 if gamma1 == -2 && gamma2 == 2
-    u_0 = ones(size(t));
+    u_0 = sin(t);
     state = lsim(sys, u_0, t, x0);
     x_bar = state(end, :);
 end

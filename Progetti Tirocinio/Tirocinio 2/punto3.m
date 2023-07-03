@@ -5,18 +5,21 @@ input("\nPremi un tasto per andare avanti col punto3:")
 
 T_i = 2:1:10;
 
-x(1,1) = 1%x_bar(1,1);
-x(2,1) = 2%x_bar(1,2);
+x_f(1,1) = x_bar(1,1);
+x_f(2,1) = x_bar(1,2);
 
-u1 = zeros(1, 1 + T_i(1)/sampling_time);
-u2 = zeros(1, 1 + T_i(2)/sampling_time);
-u3 = zeros(1, 1 + T_i(3)/sampling_time);
-u4 = zeros(1, 1 + T_i(4)/sampling_time);
-u5 = zeros(1, 1 + T_i(5)/sampling_time);
-u6 = zeros(1, 1 + T_i(6)/sampling_time);
-u7 = zeros(1, 1 + T_i(7)/sampling_time);
-u8 = zeros(1, 1 + T_i(8)/sampling_time);
-u9 = zeros(1, 1 + T_i(9)/sampling_time);
+u1 = [];
+u2 = [];
+u3 = [];
+u4 = [];
+u5 = [];
+u6 = [];
+u7 = [];
+u8 = [];
+u9 = [];
+
+clear tau
+syms tau
 
 tau1 = 0:sampling_time:T_i(1);
 tau2 = 0:sampling_time:T_i(2);
@@ -30,7 +33,7 @@ tau9 = 0:sampling_time:T_i(9);
 
 
 
-for i = 1:1:1%length(T_i)
+for i = 1:1:length(T_i)
 
     if gamma1 == -8 && gamma2 == -6
         G(1,1) = 1/96 + (-1/16)*exp(-4*T_i(i)) + (1/12)*exp(-6*T_i(i)) + (-1/32)*exp(-8*T_i(i));
@@ -61,43 +64,45 @@ for i = 1:1:1%length(T_i)
     end
 
 
-    beta = pinv(G)*x;
+    beta = pinv(G)*x_f;
+    u_cappuccio = B'*expm(A'*(T_i(i)-tau))*beta;
 
-    tau = 0:sampling_time:T_i(i);
+    time = 0:sampling_time:T_i(i);
+    U = [];
     
-    for j = 1:1:length(tau)
+    for k = 1:1:length(time)
         switch i
             case 1
-                u1(j) = B'*exp(A'*(T_i(1)-tau(j)))*beta;
+                u1 = [u1 double(subs(u_cappuccio, tau, time(k)))];
 
             case 2
-                u2(j) = B'*exp(A'*(T_i(2)-tau(j)))*beta;
+                u2 = [u2 double(subs(u_cappuccio, tau, time(k)))];
 
             case 3
-                u3(j) = B'*exp(A'*(T_i(3)-tau(j)))*beta;
+                u3 = [u3 double(subs(u_cappuccio, tau, time(k)))];
 
             case 4
-                u4(j) = B'*exp(A'*(T_i(4)-tau(j)))*beta;
+                u4 = [u4 double(subs(u_cappuccio, tau, time(k)))];
 
             case 5
-                u5(j) = B'*exp(A'*(T_i(5)-tau(j)))*beta;
+                u5 = [u5 double(subs(u_cappuccio, tau, time(k)))];
 
             case 6
-                u6(j) = B'*exp(A'*(T_i(6)-tau(j)))*beta;
+                u6 = [u6 double(subs(u_cappuccio, tau, time(k)))];
 
             case 7
-                u7(j) = B'*exp(A'*(T_i(7)-tau(j)))*beta;
+                u7 = [u7 double(subs(u_cappuccio, tau, time(k)))];
 
             case 8
-                u8(j) = B'*exp(A'*(T_i(8)-tau(j)))*beta;
+                u8 = [u8 double(subs(u_cappuccio, tau, time(k)))];
 
             case 9
-                u9(j) = B'*exp(A'*(T_i(9)-tau(j)))*beta;
+                u9 = [u9 double(subs(u_cappuccio, tau, time(k)))];
 
             otherwise
                 disp('errore');
-        end  
-    end
+        end   
+   end
 
   
 end
@@ -253,17 +258,5 @@ hold off
 grid on
 
 
-
-
-
-
-
-
-
-G
-
-Ginversa = pinv(G)
-
-beta = pinv(G)*x
 
 
