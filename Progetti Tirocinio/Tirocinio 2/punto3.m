@@ -1,6 +1,8 @@
 % Insieme di tempi T1, T2, ..., Tm (incluso t_bar)
 % Per ognuno di questi calcolare un controllo u, partendo da x0 fino a x_bar
 
+input("\nPremi un tasto per andare avanti col punto3:")
+
 T_i = 2:1:10;
 
 x(1,1) = x_bar(1,1);
