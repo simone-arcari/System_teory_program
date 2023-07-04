@@ -75,9 +75,9 @@ fprintf("lambda2 = %f + %fi\n", real(z), imag(z))
 % Facendo tendere a zero d_tau e sampling_time si otterà un integrazione
 % sempre più precisa ma con un aumento notevole del costo computazionale
 
-d_tau = 0.0025;
+d_tau = 0.0025;%0.000015;
 sampling_time = 0.025;
-max_time = 10;
+max_time = 20;
 t = 0:sampling_time:max_time;
 
 
@@ -116,7 +116,6 @@ for i = 2:1:(max_time/sampling_time)+1
         M2 = (B')*expm(A'*tau(j));
 
         G = G + M1*M2*d_tau;
-        %%beta = inv(M2)*u()
 
         G11(i) = G(1,1);
         G12(i) = G(1,2);

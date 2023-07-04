@@ -3,7 +3,7 @@
 
 input("\nPremi un tasto per andare avanti col punto3:")
 
-T_i = 2:1:10;
+T_i = 2:2:18;
 
 x_f(1,1) = x_bar(1,1);
 x_f(2,1) = x_bar(1,2);
@@ -31,7 +31,8 @@ tau7 = 0:sampling_time:T_i(7);
 tau8 = 0:sampling_time:T_i(8);
 tau9 = 0:sampling_time:T_i(9);
 
-
+J_Ti = zeros(1,9); % vettore per i vari costi J (fa parte del punto 4)
+J = [];
 
 for i = 1:1:length(T_i)
 
@@ -65,39 +66,41 @@ for i = 1:1:length(T_i)
 
 
     beta = pinv(G)*x_f;
-    u_cappuccio = B'*expm(A'*(T_i(i)-tau))*beta;
+    u_star = B'*expm(A'*(T_i(i)-tau))*beta;
+    J_Ti(i) = int(u_star'*u_star, tau, 0, T_i(i));
+    %J = [J int(u_star'*u_star, tau, 0, T_i(i))];
+    
 
     time = 0:sampling_time:T_i(i);
-    U = [];
-    
+   
     for k = 1:1:length(time)
         switch i
             case 1
-                u1 = [u1 double(subs(u_cappuccio, tau, time(k)))];
+                u1 = [u1 double(subs(u_star, tau, time(k)))];
 
             case 2
-                u2 = [u2 double(subs(u_cappuccio, tau, time(k)))];
+                u2 = [u2 double(subs(u_star, tau, time(k)))];
 
             case 3
-                u3 = [u3 double(subs(u_cappuccio, tau, time(k)))];
+                u3 = [u3 double(subs(u_star, tau, time(k)))];
 
             case 4
-                u4 = [u4 double(subs(u_cappuccio, tau, time(k)))];
+                u4 = [u4 double(subs(u_star, tau, time(k)))];
 
             case 5
-                u5 = [u5 double(subs(u_cappuccio, tau, time(k)))];
+                u5 = [u5 double(subs(u_star, tau, time(k)))];
 
             case 6
-                u6 = [u6 double(subs(u_cappuccio, tau, time(k)))];
+                u6 = [u6 double(subs(u_star, tau, time(k)))];
 
             case 7
-                u7 = [u7 double(subs(u_cappuccio, tau, time(k)))];
+                u7 = [u7 double(subs(u_star, tau, time(k)))];
 
             case 8
-                u8 = [u8 double(subs(u_cappuccio, tau, time(k)))];
+                u8 = [u8 double(subs(u_star, tau, time(k)))];
 
             case 9
-                u9 = [u9 double(subs(u_cappuccio, tau, time(k)))];
+                u9 = [u9 double(subs(u_star, tau, time(k)))];
 
             otherwise
                 disp('errore');
@@ -136,6 +139,7 @@ plot(tau9, u9)
 grid on
  
 
+
 figure(4)
 hold on
 xlabel('tempi [t]', 'FontSize', 16)
@@ -169,8 +173,35 @@ plot(tau8, stato8(:,2), 'color', 'blue')
 plot(tau9, stato9(:,1), 'color', 'red')
 plot(tau9, stato9(:,2), 'color', 'blue')
 
+%stati con u=u_0
+plot(t, state(:,1), 'color', 'green')
+plot(t, state(:,2), 'color', 'magenta')
+
 grid on
 
 
+
+figure(5)
+hold on
+xlabel('x_1', 'FontSize', 16)
+ylabel('x_2', 'FontSize', 16)
+title('Andamento Stati piano x_1,x_2', 'FontSize', 16)
+
+plot(stato1(:,1), stato1(:,2), 'color', 'red')
+plot(stato2(:,1), stato2(:,2), 'color', 'red')
+plot(stato3(:,1), stato3(:,2), 'color', 'red')
+plot(stato4(:,1), stato4(:,2), 'color', 'red')
+plot(stato5(:,1), stato5(:,2), 'color', 'red')
+plot(stato6(:,1), stato6(:,2), 'color', 'red')
+plot(stato7(:,1), stato7(:,2), 'color', 'red')
+plot(stato8(:,1), stato8(:,2), 'color', 'red')
+plot(stato9(:,1), stato9(:,2), 'color', 'red')
+
+%stati con u=u_0
+plot(state(:,1), state(:,2), 'color', 'green')
+
+grid on
+
+punto4
 
 

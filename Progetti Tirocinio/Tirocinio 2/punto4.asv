@@ -1,0 +1,17 @@
+
+J_t_bar = int(sin(tau)*sin(tau), tau, 0, t_bar);
+J = [J J_t_bar];
+
+%% Grafici
+figure(5)
+hold on
+xlabel('T_i', 'FontSize', 16)
+ylabel('J(T_i)', 'FontSize', 16)
+title('Costi', 'FontSize', 16)
+
+%plot(T_i, J_Ti)
+plot([T_i, J)
+
+plot(t_bar, J_t_bar, '-o')
+
+grid on

@@ -3,20 +3,23 @@
 
 input("\nPremi un tasto per andare avanti col punto3:")
 
-T_i = 2:1:10;
+T_i = 2:2:18;
 
-x_f(1,1) = 1;%x_bar(1,1);
-x_f(2,1) = 2;%x_bar(1,2);
+x_f(1,1) = x_bar(1,1);
+x_f(2,1) = x_bar(1,2);
 
-u1 = zeros(1, 1 + T_i(1)/sampling_time);
-u2 = zeros(1, 1 + T_i(2)/sampling_time);
-u3 = zeros(1, 1 + T_i(3)/sampling_time);
-u4 = zeros(1, 1 + T_i(4)/sampling_time);
-u5 = zeros(1, 1 + T_i(5)/sampling_time);
-u6 = zeros(1, 1 + T_i(6)/sampling_time);
-u7 = zeros(1, 1 + T_i(7)/sampling_time);
-u8 = zeros(1, 1 + T_i(8)/sampling_time);
-u9 = zeros(1, 1 + T_i(9)/sampling_time);
+u1 = [];
+u2 = [];
+u3 = [];
+u4 = [];
+u5 = [];
+u6 = [];
+u7 = [];
+u8 = [];
+u9 = [];
+
+clear tau
+syms tau
 
 tau1 = 0:sampling_time:T_i(1);
 tau2 = 0:sampling_time:T_i(2);
@@ -28,7 +31,8 @@ tau7 = 0:sampling_time:T_i(7);
 tau8 = 0:sampling_time:T_i(8);
 tau9 = 0:sampling_time:T_i(9);
 
-
+J_Ti = zeros(1,9); % vettore per i vari costi J (fa parte del punto 4)
+J = [];
 
 for i = 1:1:length(T_i)
 
@@ -62,92 +66,50 @@ for i = 1:1:length(T_i)
 
 
     beta = pinv(G)*x_f;
-    u_cappuccio = B'*exp(A'*(T_i(i)-tau))*beta;
+    u_star = B'*expm(A'*(T_i(i)-tau))*beta;
+    J_Ti(i) = int(u_star'*u_star, tau, 0, T_i(i));
+    %J = [J int(u_star'*u_star, tau, 0, T_i(i))];
+    
 
     time = 0:sampling_time:T_i(i);
-    U = [];
-    
+   
     for k = 1:1:length(time)
-        U = [U double(subs(u_cappuccio, tau, ))]
-    end
-
-
         switch i
             case 1
-                u1(j) = B'*exp(A'*(T_i(1)-tau(j)))*beta;
+                u1 = [u1 double(subs(u_star, tau, time(k)))];
 
             case 2
-                u2(j) = B'*exp(A'*(T_i(2)-tau(j)))*beta;
+                u2 = [u2 double(subs(u_star, tau, time(k)))];
 
             case 3
-                u3(j) = B'*exp(A'*(T_i(3)-tau(j)))*beta;
+                u3 = [u3 double(subs(u_star, tau, time(k)))];
 
             case 4
-                u4(j) = B'*exp(A'*(T_i(4)-tau(j)))*beta;
+                u4 = [u4 double(subs(u_star, tau, time(k)))];
 
             case 5
-                u5(j) = B'*exp(A'*(T_i(5)-tau(j)))*beta;
+                u5 = [u5 double(subs(u_star, tau, time(k)))];
 
             case 6
-                u6(j) = B'*exp(A'*(T_i(6)-tau(j)))*beta;
+                u6 = [u6 double(subs(u_star, tau, time(k)))];
 
             case 7
-                u7(j) = B'*exp(A'*(T_i(7)-tau(j)))*beta;
+                u7 = [u7 double(subs(u_star, tau, time(k)))];
 
             case 8
-                u8(j) = B'*exp(A'*(T_i(8)-tau(j)))*beta;
+                u8 = [u8 double(subs(u_star, tau, time(k)))];
 
             case 9
-                u9(j) = B'*exp(A'*(T_i(9)-tau(j)))*beta;
+                u9 = [u9 double(subs(u_star, tau, time(k)))];
 
             otherwise
                 disp('errore');
-        end  
-    end
+        end   
+   end
 
   
 end
 
-%% Grafici Ingressi u_i
-close all
-
-figure(1)
-plot(tau1, u1)
-grid on
-
-figure(2)
-plot(tau2, u2)
-grid on
-
-figure(3)
-plot(tau3, u3)
-grid on
-
-figure(4)
-plot(tau4, u4)
-grid on
-
-figure(5)
-plot(tau5, u5)
-grid on
-
-figure(6)
-plot(tau6, u6)
-grid on
-
-figure(7)
-plot(tau7, u7)
-grid on
-
-figure(8)
-plot(tau8, u8)
-grid on
-
-figure(9)
-plot(tau9, u9)
-grid on
-
-%% 
 stato1 = lsim(sys, u1, tau1, x0);
 stato2 = lsim(sys, u2, tau2, x0);
 stato3 = lsim(sys, u3, tau3, x0);
@@ -158,118 +120,106 @@ stato7 = lsim(sys, u7, tau7, x0);
 stato8 = lsim(sys, u8, tau8, x0);
 stato9 = lsim(sys, u9, tau9, x0);
 
+%% Grafici 
 
-figure(10)
-xlabel('tempi [t]', 'FontSize', 16)
-ylabel('X', 'FontSize', 16)
-title('Andamento Stati', 'FontSize', 16)
-plot(tau1, stato1(:,1), '-x')
+figure(3)
 hold on
-plot(tau1, stato1(:,2), '-x')
-legend('x1', 'x2')
-hold off
+xlabel('tempi [t]', 'FontSize', 16)
+ylabel('U', 'FontSize', 16)
+title('Andamento Ingressi per vari T_i', 'FontSize', 16)
+plot(tau1, u1)
+plot(tau2, u2)
+plot(tau3, u3)
+plot(tau4, u4)
+plot(tau5, u5)
+plot(tau6, u6)
+plot(tau7, u7)
+plot(tau8, u8)
+plot(tau9, u9)
 grid on
+ 
 
-figure(11)
+
+figure(4)
+hold on
 xlabel('tempi [t]', 'FontSize', 16)
 ylabel('X', 'FontSize', 16)
 title('Andamento Stati', 'FontSize', 16)
-plot(tau2, stato2(:,1), '-x')
-hold on
-plot(tau2, stato2(:,2), '-x')
-legend('x1', 'x2')
-hold off
-grid on
 
-figure(12)
-xlabel('tempi [t]', 'FontSize', 16)
-ylabel('X', 'FontSize', 16)
-title('Andamento Stati', 'FontSize', 16)
-plot(tau3, stato3(:,1), '-x')
-hold on
-plot(tau3, stato3(:,2), '-x')
-legend('x1', 'x2')
-hold off
-grid on
+plot(tau1, stato1(:,1), 'color', 'red')
+plot(tau1, stato1(:,2), 'color', 'blue')
 
-figure(13)
-xlabel('tempi [t]', 'FontSize', 16)
-ylabel('X', 'FontSize', 16)
-title('Andamento Stati', 'FontSize', 16)
-plot(tau4, stato4(:,1), '-x')
-hold on
-plot(tau4, stato4(:,2), '-x')
-legend('x1', 'x2')
-hold off
-grid on
+plot(tau2, stato2(:,1), 'color', 'red')
+plot(tau2, stato2(:,2), 'color', 'blue')
 
-figure(14)
-xlabel('tempi [t]', 'FontSize', 16)
-ylabel('X', 'FontSize', 16)
-title('Andamento Stati', 'FontSize', 16)
-plot(tau5, stato5(:,1), '-x')
-hold on
-plot(tau5, stato5(:,2), '-x')
-legend('x1', 'x2')
-hold off
-grid on
+plot(tau3, stato3(:,1), 'color', 'red')
+plot(tau3, stato3(:,2), 'color', 'blue')
 
-figure(15)
-xlabel('tempi [t]', 'FontSize', 16)
-ylabel('X', 'FontSize', 16)
-title('Andamento Stati', 'FontSize', 16)
-plot(tau6, stato6(:,1), '-x')
-hold on
-plot(tau6, stato6(:,2), '-x')
-legend('x1', 'x2')
-hold off
-grid on
+plot(tau4, stato4(:,1), 'color', 'red')
+plot(tau4, stato4(:,2), 'color', 'blue')
 
-figure(16)
-xlabel('tempi [t]', 'FontSize', 16)
-ylabel('X', 'FontSize', 16)
-title('Andamento Stati', 'FontSize', 16)
-plot(tau7, stato7(:,1), '-x')
-hold on
-plot(tau7, stato7(:,2), '-x')
-legend('x1', 'x2')
-hold off
-grid on
+plot(tau5, stato5(:,1), 'color', 'red')
+plot(tau5, stato5(:,2), 'color', 'blue')
 
-figure(17)
-xlabel('tempi [t]', 'FontSize', 16)
-ylabel('X', 'FontSize', 16)
-title('Andamento Stati', 'FontSize', 16)
-plot(tau8, stato8(:,1), '-x')
-hold on
-plot(tau8, stato8(:,2), '-x')
-legend('x1', 'x2')
-hold off
-grid on
+plot(tau6, stato6(:,1), 'color', 'red')
+plot(tau6, stato6(:,2), 'color', 'blue')
 
-figure(18)
-xlabel('tempi [t]', 'FontSize', 16)
-ylabel('X', 'FontSize', 16)
-title('Andamento Stati', 'FontSize', 16)
-plot(tau9, stato9(:,1), '-x')
-hold on
-plot(tau9, stato9(:,2), '-x')
-legend('x1', 'x2')
-hold off
+plot(tau7, stato7(:,1), 'color', 'red')
+plot(tau7, stato7(:,2), 'color', 'blue')
+
+plot(tau8, stato8(:,1), 'color', 'red')
+plot(tau8, stato8(:,2), 'color', 'blue')
+
+plot(tau9, stato9(:,1), 'color', 'red')
+plot(tau9, stato9(:,2), 'color', 'blue')
+
+%stati con u=u_0
+plot(t, state(:,1), 'color', 'green')
+plot(t, state(:,2), 'color', 'magenta')
+
 grid on
 
 
 
+figure(5)
+hold on
+xlabel('x_1', 'FontSize', 16)
+ylabel('x_2', 'FontSize', 16)
+title('Andamento Stati piano x_', 'FontSize', 16)
 
+plot(tau1, stato1(:,1), 'color', 'red')
+plot(tau1, stato1(:,2), 'color', 'blue')
 
+plot(tau2, stato2(:,1), 'color', 'red')
+plot(tau2, stato2(:,2), 'color', 'blue')
 
+plot(tau3, stato3(:,1), 'color', 'red')
+plot(tau3, stato3(:,2), 'color', 'blue')
 
+plot(tau4, stato4(:,1), 'color', 'red')
+plot(tau4, stato4(:,2), 'color', 'blue')
 
+plot(tau5, stato5(:,1), 'color', 'red')
+plot(tau5, stato5(:,2), 'color', 'blue')
 
-G
+plot(tau6, stato6(:,1), 'color', 'red')
+plot(tau6, stato6(:,2), 'color', 'blue')
 
-Ginversa = pinv(G)
+plot(tau7, stato7(:,1), 'color', 'red')
+plot(tau7, stato7(:,2), 'color', 'blue')
 
-beta = pinv(G)*x
+plot(tau8, stato8(:,1), 'color', 'red')
+plot(tau8, stato8(:,2), 'color', 'blue')
+
+plot(tau9, stato9(:,1), 'color', 'red')
+plot(tau9, stato9(:,2), 'color', 'blue')
+
+%stati con u=u_0
+plot(t, state(:,1), 'color', 'green')
+plot(t, state(:,2), 'color', 'magenta')
+
+grid on
+
+punto4
 
 
