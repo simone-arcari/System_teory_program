@@ -58,8 +58,8 @@ eig(H)
 %% Caso V progettata come guadagno di un filtro di Kalman
 Q = 1;
 R = 1;
-[K, L, P] = kalman(ss(A,B,C,D), Q, R);
-V = L;
+[K, P, E] = kalman(ss(A,B,C,RE, Q, R);
+V = transpose(K);
 H = A - V*C;
 eig(H)
 
