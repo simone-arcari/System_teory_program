@@ -82,8 +82,8 @@ eig(H)
 %% Caso V progettata come guadagno di un filtro di Kalman
 Q = 1;
 R = 1;
-[K, L, P] = kalman(ss(A,B,C,D), Q, R);
-V = L;
+[K, LV, P] = kalman(ss(A,B,C,D), Q, R);
+V = LV;
 H = A - V*C;
 eig(H)
 
@@ -95,8 +95,67 @@ g3 = 0;     % guadagno moltiplicativo nello schema simulink per l'ingresso gauss
 g4 = 0;     % guadagno moltiplicativo nello schema simulink per l'ingresso a distribuzione uniforme
 g5 = -100;  % guadagno moltiplicativo nello schema simulink per il disturbo addittivo (Forza Resistiva sul vagone 2 dovuta all'attrito con l'aria)
 
-min_disturbo = 0.95;    % valore minimo per la distrubuzione uniforme che genera i
-max_disturbo = 1;
+min_disturbo = 0.95;    % valore minimo per la distrubuzione uniforme che genera il disturbo su simulink
+max_disturbo = 1;       % valore massimo per la distrubuzione uniforme che genera il disturbo su simulink
+
+x_0_stimato = [0; 0; 0; 0];
+
+%% Simulazione con valori piccoli
+
+g1 = 10;    % guadagno moltiplicativo nello schema simulink per l'ingresso sinusoidale
+g2 = 0;     % guadagno moltiplicativo nello schema simulink per l'ingresso a gradino (Forza Motrice sul vagone 1)
+g3 = 0;     % guadagno moltiplicativo nello schema simulink per l'ingresso gaussiano
+g4 = 0;     % guadagno moltiplicativo nello schema simulink per l'ingresso a distribuzione uniforme
+g5 = 5;     % guadagno moltiplicativo nello schema simulink per il disturbo addittivo (Forza Resistiva sul vagone 2 dovuta all'attrito con l'aria)
+
+min_disturbo = -1;    % valore minimo per la distrubuzione uniforme che genera il disturbo su simulink
+max_disturbo = 1;       % valore massimo per la distrubuzione uniforme che genera il disturbo su simulink
+
+x_0_stimato = [1; 2; 0; 0];
 
 
+
+
+
+%% caso autovalori immaginari puri (0.6831i ; -0,6831i ; 0 ; 0)  |  F_elastica_max = K*L = 2000 N
+m1 = 2078; %2000;
+m2 = 1463; %1500;
+c =  4.6;  %0;
+k =  391; %400;
+L = 5;
+
+A = [0,0,1,0 ; 0,0,0,1 ; -k/m1, k/m1, -c/m1, c/m1 ; k/m2, -k/m2, c/m2, -c/m2];
+B = [0 ; 0 ; 1/m1 ; 0];
+M = [0 ; 0 ; 0 ; 1/m2]; 
+C = [1, 0, 0, 0];
+D = 0;
+x_0 = [0 ; 0 ; 0 ; 0];
+
+
+
+%% caso autovalori complessi coniugati (-0.2917 + 0.3851i ; -0.8205 - 0.8205i ; 0 ; 0)  |  F_elastica_max = K*L = 1950 N
+m1 = 2078; %2000;
+m2 = 1463; %1500;
+c = 570; %500;
+k = %650;
+L = 3;
+
+A = [0,0,1,0 ; 0,0,0,1 ; -k/m1, k/m1, -c/m1, c/m1 ; k/m2, -k/m2, c/m2, -c/m2];
+B = [0 ; 0 ; 1/m1 ; 0];
+M = [0 ; 0 ; 0 ; 1/m2]; 
+C = [1, 0, 0, 0];
+D = 0;
+x_0 = [0 ; 0 ; 0 ; 0];
+
+%% caso autovalori reali e distinti (-1.3020 ; -0.4480 ; 0 ; 0)|  F_elastica_max = K*L = 2000 N
+c = 1500;
+k = 500;
+L = 4;
+
+A = [0,0,1,0 ; 0,0,0,1 ; -k/m1, k/m1, -c/m1, c/m1 ; k/m2, -k/m2, c/m2, -c/m2];
+B = [0 ; 0 ; 1/m1 ; 0];
+M = [0 ; 0 ; 0 ; 1/m2]; 
+C = [1, 0, 0, 0];
+D = 0;
+x_0 = [0 ; 0 ; 0 ; 0];
 
