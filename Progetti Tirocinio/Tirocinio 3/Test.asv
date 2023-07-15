@@ -14,7 +14,7 @@
 % di raggiungere:
 % la velocità di 100 km/h in appena 55.5 s.
 % la velocità di 200 km/h in appena 1 minuto e 51.1 s.
-% la velocità di crociera di 300 km/h in appena 2 minut1 e 46.6 s.
+% la velocità di crociera di 300 km/h in appena 2 minuti e 46.6 s.
 
 %% Punto 1
 clc
@@ -52,7 +52,7 @@ C = [1, 0, 0, 0];
 
 D = 0;
 
-x_0 = [0 ; L ; 0 ; 0];
+x_0 = [0 ; 0 ; 0 ; 0];
 
 Pd = C;                                          
     
@@ -65,14 +65,14 @@ Pd = C;
 Ad = A';
 Bd = C';
 
-%% Caso Autovalori che convergono lentamente
+%% Caso V con autovalori che convergono lentamente
 poles = [-1,-2,-3,-4];
 K = place(Ad,Bd,poles);
 V = transpose(K);
 H = A - V*C;
 eig(H)
 
-%% Caso Autovalori che convergono velocemente
+%% Caso V con autovalori che convergono velocemente
 poles = [-10,-20,-30,-40];
 K = place(Ad,Bd,poles);
 V = transpose(K);
@@ -87,9 +87,16 @@ V = L;
 H = A - V*C;
 eig(H)
 
-%% Simulazione sistema
+%% Simulazione realistica del convoglio
 
+g1 = 0;     % guadagno moltiplicativo nello schema simulink per l'ingresso sinusoidale
+g2 = 1750;  % guadagno moltiplicativo nello schema simulink per l'ingresso a gradino (Forza Motrice sul vagone 1)
+g3 = 0;     % guadagno moltiplicativo nello schema simulink per l'ingresso gaussiano
+g4 = 0;     % guadagno moltiplicativo nello schema simulink per l'ingresso a distribuzione uniforme
+g5 = -100;  % guadagno moltiplicativo nello schema simulink per il disturbo addittivo (Forza Resistiva sul vagone 2 dovuta all'attrito con l'aria)
 
+min_disturbo = 0.95;    % valore minimo per la distrubuzione uniforme che genera i
+max_disturbo = 1;
 
 
 
