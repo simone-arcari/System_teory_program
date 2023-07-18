@@ -20,7 +20,7 @@ sys = ss(A,B,C,D);
 
 %% gamma1: -8, gamma2: -6, --> lambda1: -2, lambda2: -4
 if gamma1 == -8 && gamma2 == -6
-    u_0 = 1000*sin(t);%15*exp(-0.01*t);
+    u_0 = 1000*sin(t); %15*exp(-0.01*t);
     state = lsim(sys, u_0, t, x0);
     x_bar = state(end, :);
 end

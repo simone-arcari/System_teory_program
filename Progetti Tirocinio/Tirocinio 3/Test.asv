@@ -66,7 +66,7 @@ Ad = A';
 Bd = C';
 
 %% Caso V con autovalori che convergono lentamente
-poles = [-2,-3,-4,-5];
+poles = [-1,-2,-3,-4];
 K = place(Ad,Bd,poles);
 V = transpose(K);
 H = A - V*C;
@@ -108,7 +108,6 @@ g2 = 1750;  % guadagno moltiplicativo nello schema simulink per l'ingresso a gra
 g3 = 0;     % guadagno moltiplicativo nello schema simulink per l'ingresso gaussiano
 g4 = 0;     % guadagno moltiplicativo nello schema simulink per l'ingresso a distribuzione uniforme
 g5 = -100;  % guadagno moltiplicativo nello schema simulink per il disturbo addittivo (Forza Resistiva sul vagone 2 dovuta all'attrito con l'aria)
-g6 = 100;   % guadagno moltiplicativo nello schema simulink per l'errore additivo di misura
 
 min_disturbo = 0.95;    % valore minimo per la distrubuzione uniforme che genera il disturbo su simulink
 max_disturbo = 1;       % valore massimo per la distrubuzione uniforme che genera il disturbo su simulink
@@ -117,12 +116,11 @@ x_0_stimato = [0; 0; 0; 0];
 
 %% Simulazione con valori piccoli
 
-g1 = 0;    % guadagno moltiplicativo nello schema simulink per l'ingresso sinusoidale
-g2 = 1;     % guadagno moltiplicativo nello schema simulink per l'ingresso a gradino (Forza Motrice sul vagone 1)
+g1 = 10;    % guadagno moltiplicativo nello schema simulink per l'ingresso sinusoidale
+g2 = 0;     % guadagno moltiplicativo nello schema simulink per l'ingresso a gradino (Forza Motrice sul vagone 1)
 g3 = 0;     % guadagno moltiplicativo nello schema simulink per l'ingresso gaussiano
 g4 = 0;     % guadagno moltiplicativo nello schema simulink per l'ingresso a distribuzione uniforme
-g5 = 50;     % guadagno moltiplicativo nello schema simulink per il disturbo addittivo (Forza Resistiva sul vagone 2 dovuta all'attrito con l'aria)
-g6 = 1;   % guadagno moltiplicativo nello schema simulink per l'errore additivo di misura
+g5 = 5;     % guadagno moltiplicativo nello schema simulink per il disturbo addittivo (Forza Resistiva sul vagone 2 dovuta all'attrito con l'aria)
 
 min_disturbo = -1;    % valore minimo per la distrubuzione uniforme che genera il disturbo su simulink
 max_disturbo = 1;       % valore massimo per la distrubuzione uniforme che genera il disturbo su simulink

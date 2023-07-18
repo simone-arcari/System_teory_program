@@ -75,9 +75,9 @@ fprintf("lambda2 = %f + %fi\n", real(z), imag(z))
 % Facendo tendere a zero d_tau e sampling_time si otterà un integrazione
 % sempre più precisa ma con un aumento notevole del costo computazionale
 
-d_tau = 0.0025;%0.000015;
-sampling_time = 0.025;
-max_time = 20;
+d_tau = 0.00025;%0.000015;       %Precisione integrale definito
+sampling_time = 0.025;          %Gap di campionamento
+max_time = 20;                  %durata simulazione
 t = 0:sampling_time:max_time;
 
 
@@ -203,4 +203,4 @@ legend('G22 simulata', 'G22 analitica')
 hold off
 grid on
 
-punto2
+%punto2

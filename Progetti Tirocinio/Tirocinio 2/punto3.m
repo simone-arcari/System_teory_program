@@ -1,9 +1,11 @@
 % Insieme di tempi T1, T2, ..., Tm (incluso t_bar)
-% Per ognuno di questi calcolare un controllo u, partendo da x0 fino a x_bar
+% Per ognuno di questi tempi calcolare un controllo ottimo u, partendo da x0 fino a x_bar
 
 input("\nPremi un tasto per andare avanti col punto3:")
 
 T_i = 2:2:18;
+
+%T_i(9) = 40;
 
 x_f(1,1) = x_bar(1,1);
 x_f(2,1) = x_bar(1,2);
