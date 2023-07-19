@@ -32,7 +32,7 @@ k = 400;
 L = 5;
 
 %% caso autovalori complessi coniugati (-0.2917 + 0.3851i ; -0.8205 - 0.8205i ; 0 ; 0)  |  F_elastica_max = K*L = 1950 N
-c = 500;
+c = -500;
 k = 650;
 L = 3;
 
@@ -49,8 +49,16 @@ D = 0;
 
 x_0 = [2 ; 3 ; 1 ; 1]; %[pos. primo vagone (relativo al suo zero) ; pos. secondo vagone (relativo al suo zero) ; velocità primo vagone ; velocità secondo vagone]
 
-Pd = C;                                          
-    
+% calcolo P
+P = B;
+    for i = 1:1:3                                
+
+        Temp = (A^i)*B;                                
+        P = [P Temp];                                  
+    end
+
+%calcolo Pd = Q
+Pd = C;                                              
     for i = 1:1:3                                
 
         Temp = (C)*(A^i);                                
@@ -62,13 +70,13 @@ Bd = C';
 
 %% Calcolo V ed F
 poles = [-10,-20,-30,-40];
-K = place(Ad,Bd,poles);
-V = transpose(K);
+Fd = -place(Ad,Bd,poles);
+V = -Fd';
 H = A - V*C;
 eig(H)
 
-poles = [-10,-20,-30,-40];
-F = place(Ad,Bd,poles);
+poles = [-1, -2, -0.5, -0.9];
+F = -place(A,B,poles);
 
 As = A + B*F;
 eig(As)
@@ -81,16 +89,12 @@ g2 = 1750;  % guadagno moltiplicativo nello schema simulink per l'ingresso a gra
 g3 = 0;     % guadagno moltiplicativo nello schema simulink per l'ingresso gaussiano
 g4 = 0;     % guadagno moltiplicativo nello schema simulink per l'ingresso a distribuzione uniforme
 
-x_0_stimato = [0; 0; 0; 0];
-
 %% Simulazione con valori piccoli
 
-g1 = 0;    % guadagno moltiplicativo nello schema simulink per l'ingresso sinusoidale
-g2 = 1;     % guadagno moltiplicativo nello schema simulink per l'ingresso a gradino (Forza Motrice sul vagone 1)
-g3 = 0;     % guadagno moltiplicativo nello schema simulink per l'ingresso gaussiano
+g1 = 0;     % guadagno moltiplicativo nello schema simulink per l'ingresso sinusoidale
+g2 = 0;     % guadagno moltiplicativo nello schema simulink per l'ingresso a gradino (Forza Motrice sul vagone 1)
+g3 = 10;     % guadagno moltiplicativo nello schema simulink per l'ingresso a rampa
 g4 = 0;     % guadagno moltiplicativo nello schema simulink per l'ingresso a distribuzione uniforme
-
-x_0_stimato = [1; 2; 0; 0];
 
 %% caso autovalori immaginari puri (0.6831i ; -0,6831i ; 0 ; 0)  |  F_elastica_max = K*L = 2000 N
 m1 = 2078; %2000;
